@@ -4,9 +4,14 @@ metadata:
   name: api-app
   namespace: default
 spec:
+  interval: 5m0s
   chart:
     spec:
-      chart: ./flux-agro-cd-lab         
+      chart: ./flux-agro-cd-lab
+      sourceRef:
+        kind: GitRepository
+        name: flux-agro-cd-lab
+        namespace: flux-system
   values:
     image:
       repository: radeczu/apitestapp
