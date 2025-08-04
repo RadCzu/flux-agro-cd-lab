@@ -10,7 +10,7 @@ spec:
       chart: "./flux-agro-cd-lab"
       sourceRef:
         kind: GitRepository
-        name: flux-agro-cd-lab
+        name: flux-system
         namespace: flux-system
   targetNamespace: default
   values:
