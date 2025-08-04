@@ -13,3 +13,5 @@ spec:
     namespace: flux-system
   targetNamespace: default
   validation: client
+  resources:
+    - helmrelease-api-app.yaml
