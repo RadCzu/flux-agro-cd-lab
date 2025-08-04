@@ -12,6 +12,7 @@ spec:
         kind: GitRepository
         name: flux-agro-cd-lab
         namespace: flux-system
+  targetNamespace: default
   values:
     image:
       repository: radeczu/apitestapp
