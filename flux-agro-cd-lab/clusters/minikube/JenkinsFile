@@ -21,7 +21,7 @@ pipeline {
   
                 cd "flux-agro-cd-lab/clusters/minikube"
 
-                $releaseFile="helmrelease-api-app.yaml"
+                releaseFile="helmrelease-api-app.yaml"
 
                 current_tag=$(grep 'tag:' "${releaseFile}" | awk '{print $2}')
 
