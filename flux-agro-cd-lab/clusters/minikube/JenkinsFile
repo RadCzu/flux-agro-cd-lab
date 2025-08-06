@@ -23,7 +23,7 @@ pipeline {
 
                 releaseFile="helmrelease-api-app.yaml"
 
-                current_tag=$(grep 'tag:' "${releaseFile}" | awk '{print $2}')
+                current_tag=$(grep 'tag:' ${releaseFile} | awk '{print $2}')
 
                 echo "Current image tag in ${releaseFile} is: $current_tag"
 
