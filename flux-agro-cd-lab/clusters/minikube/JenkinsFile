@@ -17,6 +17,17 @@ pipeline {
           steps {
               echo "Checking for updates.."
               sh'''
+
+                #check local version
+                git clone https://github.com/RadCzu/flux-agro-cd-lab.git flux-repo
+
+                cd flux-repo/flux-agro-cd-lab
+
+                current_tag=$(grep 'tag:' values.yaml | awk '{print $2}')
+
+                echo "Current image tag in values.yaml is: $current_tag"
+
+                #check remote version
                 REPO="radeczu/apitestapp"
 
                 tags=$(curl -s "https://hub.docker.com/v2/repositories/${REPO}/tags/?page_size=100" | jq -r '.results[].name')
