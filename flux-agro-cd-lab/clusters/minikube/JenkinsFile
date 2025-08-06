@@ -18,7 +18,7 @@ pipeline {
               echo "Checking for updates.."
               sh'''
                 #check local version
-                cat $WORKSPACE/flux-agro-cd-lab/clusters/minikube/api-app/values.yaml
+                ls
 
                 cd flux-agro-cd-lab
 
