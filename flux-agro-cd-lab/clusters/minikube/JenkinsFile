@@ -17,11 +17,10 @@ pipeline {
           steps {
               echo "Checking for updates.."
               sh'''
-
                 #check local version
-                git clone https://github.com/RadCzu/flux-agro-cd-lab.git flux-repo
+                cat $WORKSPACE/flux-agro-cd-lab/clusters/minikube/api-app/values.yaml
 
-                cd flux-repo/flux-agro-cd-lab
+                cd flux-agro-cd-lab
 
                 current_tag=$(grep 'tag:' values.yaml | awk '{print $2}')
 
