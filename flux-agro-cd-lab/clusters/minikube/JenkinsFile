@@ -49,7 +49,7 @@ pipeline {
       stage('Update') {
         steps {
           echo "Updating..."
-          withCredentials([file(credentialsId: 'github-pat', variable: 'GITHUB_PAT')]) {
+          withCredentials([usernamePassword(credentialsId: 'github-pat', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GITHUB_PAT')]) {
             sh '''
               # Install git if needed
               which git || (apk add --no-cache git || apt-get update && apt-get install -y git)
