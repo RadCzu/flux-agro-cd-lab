@@ -65,8 +65,8 @@ pipeline {
               # Update tag in YAML
               sed -i "s/tag: .*/tag: \\\"$latest_tag\\\"/" "$RELEASE_FILE"
 
-              git config --global user.name "jenkins"
-              git config --global user.email "jenkins@local"
+              git config user.name "jenkins"
+              git config user.email "jenkins@local"
 
               git add "$RELEASE_FILE"
               git commit -m "chore: update image tag to $latest_tag" || echo "No changes to commit"
