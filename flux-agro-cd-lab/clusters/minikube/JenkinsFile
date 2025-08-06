@@ -18,13 +18,14 @@ pipeline {
               echo "Checking for updates.."
               sh'''
                 #check local version
-                ls
+  
+                cd "flux-agro-cd-lab/clusters/minikube"
 
-                cd flux-agro-cd-lab
+                $releaseFile="helmrelease-api-app.yaml"
 
-                current_tag=$(grep 'tag:' values.yaml | awk '{print $2}')
+                current_tag=$(grep 'tag:' "${releaseFile}" | awk '{print $2}')
 
-                echo "Current image tag in values.yaml is: $current_tag"
+                echo "Current image tag in ${releaseFile} is: $current_tag"
 
                 #check remote version
                 REPO="radeczu/apitestapp"
@@ -34,13 +35,47 @@ pipeline {
                 latest_tag=$(echo "$tags" | grep -E '^[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9]+)?$' | sort -V | tail -n 1)
 
                 echo "Latest version tag: $latest_tag"
+
+                if [ "$(printf '%s\n' "$latest_tag" "$current_tag" | sort -V | tail -n1)" = "$current_tag" ]; then
+                  echo "No update needed. Current tag ($current_tag) is up-to-date or ahead of latest ($latest_tag)."
+                  exit 1
+                else
+                  echo "Update needed. Proceeding with update..."
+                fi
               '''
           }
       }
 
       stage('Update') {
         steps {
-            echo "Updating.."
+          echo "Updating..."
+          withCredentials([file(credentialsId: 'github-pat', variable: 'GITHUB_PAT')]) {
+            sh '''
+              # Install git if needed
+              which git || (apk add --no-cache git || apt-get update && apt-get install -y git)
+
+              cd flux-agro-cd-lab/clusters/minikube
+
+              RELEASE_FILE="helmrelease-api-app.yaml"
+
+              REPO="radeczu/apitestapp"
+              tags=$(curl -s "https://hub.docker.com/v2/repositories/${REPO}/tags/?page_size=100" | jq -r '.results[].name')
+              latest_tag=$(echo "$tags" | grep -E '^[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9]+)?$' | sort -V | tail -n 1)
+
+              # Update tag in YAML
+              sed -i "s/tag: .*/tag: \\\"$latest_tag\\\"/" "$RELEASE_FILE"
+
+              git config --global user.name "jenkins"
+              git config --global user.email "jenkins@local"
+
+              git add "$RELEASE_FILE"
+              git commit -m "chore: update image tag to $latest_tag" || echo "No changes to commit"
+
+              TOKEN=$(cat "$GITHUB_PAT")
+
+              git push "https://$TOKEN@github.com/RadCzu/flux-agro-cd-lab.git" HEAD:main
+            '''
+          }
         }
       }
 
