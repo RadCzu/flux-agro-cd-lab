@@ -1,0 +1,29 @@
+pipeline {
+    environment {
+        DOCKER_HOST = 'tcp://host.docker.internal:2375'
+    }
+    agent {
+        docker {
+            image 'radeczu/node-with-jq'
+            args '--add-host=host.docker.internal:host-gateway -e DOCKER_HOST=tcp://host.docker.internal:2375'
+        }
+    }
+    triggers {
+      pollSCM '*/5 * * * *'
+    }
+    stages {
+
+      stage('Check for updates') {
+          steps {
+              echo "Checking for updates.."
+          }
+      }
+
+      stage('Update') {
+        steps {
+            echo "Updating.."
+        }
+      }
+      
+    }
+}
