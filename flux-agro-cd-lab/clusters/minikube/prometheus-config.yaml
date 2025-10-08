@@ -17,4 +17,5 @@ spec:
       extraScrapeConfigs:
         - job_name: 'api-app'
           static_configs:
-            - targets: ['{{ .Values.service.name }}:{{ .Values.service.port }}']
+            - targets: ['api-app-service.default.svc.cluster.local:2137']
+
