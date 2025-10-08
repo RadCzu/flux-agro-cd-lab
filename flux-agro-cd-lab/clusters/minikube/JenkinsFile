@@ -70,7 +70,7 @@ pipeline {
               git add "$RELEASE_FILE"
               git commit -m "chore: update image tag to $latest_tag" || echo "No changes to commit"
 
-              git push "https://$GITHUB_PAT@github.com/RadCzu/flux-agro-cd-lab.git" HEAD:main
+              git push "https://${GIT_USERNAME}:${GITHUB_PAT}@github.com/RadCzu/flux-agro-cd-lab.git" HEAD:main
             '''
           }
         }
