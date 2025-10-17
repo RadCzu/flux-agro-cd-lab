@@ -4,7 +4,7 @@ metadata:
   name: prometheus
   namespace: monitoring
 spec:
-  interval: 5m0s      
+  interval: 5m0s
   chart:
     spec:
       chart: prometheus
@@ -14,8 +14,14 @@ spec:
         name: prometheus-community
         namespace: flux-system
   values:
-    server:
-      extraScrapeConfigs:
-        - job_name: 'api-app'
-          static_configs:
-            - targets: ['api-app-service.default.svc.cluster.local:2137']
+    serverFiles:
+      prometheus.yml:
+        global:
+          scrape_interval: 15s
+        scrape_configs:
+          - job_name: 'prometheus'
+            static_configs:
+              - targets: ['localhost:9090']
+          - job_name: 'api-app'
+            static_configs:
+              - targets: ['api-app-service.default.svc.cluster.local:2137']
