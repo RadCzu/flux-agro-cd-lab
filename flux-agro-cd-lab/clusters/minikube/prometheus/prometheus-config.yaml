@@ -15,8 +15,7 @@ spec:
         namespace: flux-system
   values:
     server:
-      extraScrapeConfigs:
-        - job_name: api-app
+      extraScrapeConfigs: |
+        - job_name: 'api-app'
           static_configs:
-            - targets:
-                - api-app-service.default.svc.cluster.local:2137
+            - targets: ['api-app-service.default.svc.cluster.local:2137']
